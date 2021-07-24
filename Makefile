@@ -1,6 +1,7 @@
 clean:
 	rm -rf zigbee2mqtt-mongodb-broker.*
-
+lint:
+	golangci-lint run ./internal/... ./cmd/... ./pkg/...
 build:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o zigbee2mqtt-mongodb-broker.linux_amd64 ./cmd/zigbee2mqtt-mongodb-broker
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o zigbee2mqtt-mongodb-broker.darwin_amd64 ./cmd/zigbee2mqtt-mongodb-broker

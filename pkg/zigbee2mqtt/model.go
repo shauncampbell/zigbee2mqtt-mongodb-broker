@@ -1,5 +1,6 @@
 package zigbee2mqtt
 
+// Device is a structure which contains the information about an zigbee2mqtt device.
 type Device struct {
 	FriendlyName       string           `json:"friendly_name"`
 	IEEEAddress        string           `json:"ieee_address"`
@@ -12,6 +13,7 @@ type Device struct {
 	ModelID            string           `json:"model_id"`
 }
 
+// DeviceDefinition is a structure which contains the definition of a zigbee2mqtt device.
 type DeviceDefinition struct {
 	Description string            `json:"description"`
 	Exposes     []DeviceAttribute `json:"exposes"`
@@ -20,6 +22,7 @@ type DeviceDefinition struct {
 	Vendor      string            `json:"vendor"`
 }
 
+// DeviceAttribute is an attribute which the device exposes to the user.
 type DeviceAttribute struct {
 	Access      int    `json:"access"`
 	Description string `json:"description"`

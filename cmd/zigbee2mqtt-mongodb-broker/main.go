@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"time"
+
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/rs/zerolog/log"
 	"github.com/shauncampbell/zigbee2mqtt-mongodb-broker/internal/config"
@@ -11,14 +14,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"os"
-	"time"
 )
 
 var rootCmd = &cobra.Command{
-	Use: "zigbee2mqtt-mongodb-broker",
+	Use:  "zigbee2mqtt-mongodb-broker",
 	RunE: runBroker,
 }
+
+const defaultTimeout = 10 * time.Second
 
 func runBroker(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Read()
@@ -48,7 +51,7 @@ func runBroker(cmd *cobra.Command, args []string) error {
 		mongoDBURI = cfg.MongoDB.URI
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cancel()
 	mgoClient, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoDBURI))
 	if err != nil {
@@ -85,13 +88,15 @@ func runBroker(cmd *cobra.Command, args []string) error {
 	}
 
 	for {
-		time.Sleep(10*time.Second)
+		time.Sleep(defaultTimeout)
+		if !client.IsConnected() {
+			log.Error().Msg("connection to mqtt was severed")
+			break
+		}
 	}
 
 	return nil
 }
-
-
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
@@ -104,4 +109,3 @@ func main() {
 	}
 	os.Exit(0)
 }
-

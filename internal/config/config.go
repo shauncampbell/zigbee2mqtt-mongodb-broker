@@ -1,28 +1,32 @@
+// Package config contains configuration utilities.
 package config
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
+// Config is a struct which contains the configuration for the application.
 type Config struct {
 	MongoDB struct {
-		Host string `mapstructure:"host"`
-		Port int `mapstructure:"port"`
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
 		Username string `mapstructure:"username"`
 		Password string `mapstructure:"password"`
 		Database string `mapstructure:"db"`
-		URI string `mapstructure:"uri"`
+		URI      string `mapstructure:"uri"`
 	} `mapstructure:"mongodb"`
 	MQTT struct {
-		Host string `mapstructure:"host"`
-		Port int `mapstructure:"port"`
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
 		Username string `mapstructure:"username"`
 		Password string `mapstructure:"password"`
 	} `mapstructure:"mqtt"`
 }
 
+// Read reads in the configuration from the environment.
 func Read() (*Config, error) {
 	// MongoDB config options
 	viper.SetDefault("mongodb.host", "")
