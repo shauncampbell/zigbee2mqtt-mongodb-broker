@@ -1,0 +1,41 @@
+{
+  "branches": ["master"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          { "path":  "../../zigbee2mqtt-mongodb-broker.darwin_amd64", "label":  "zigbee2mqtt-mongodb-broker for MacOS X (x64)"},
+          { "path":  "../../zigbee2mqtt-mongodb-broker.linux_amd64", "label":  "zigbee2mqtt-mongodb-broker for Linux (x64)"},
+          { "path":  "../../zigbee2mqtt-mongodb-broker.windows_amd64.exe", "label":  "zigbee2mqtt-mongodb-broker for Windows (x64)"}
+        ]
+      }
+    ],
+    [
+      "@eclass/semantic-release-docker",
+      {
+        "baseImageName": "shauncampbell/zigbee2mqtt-mongodb-broker",
+        "registries": [
+          {
+            "url": "ghcr.io",
+            "imageName": "ghcr.io/shauncampbell/zigbee2mqtt-mongodb-broker/zigbee2mqtt-mongodb-broker",
+            "user": "GITHUB_USER",
+            "password": "GITHUB_TOKEN"
+          }
+        ]
+      }
+    ]
+  ]
+}
