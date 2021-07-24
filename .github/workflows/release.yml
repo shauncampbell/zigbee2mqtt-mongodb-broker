@@ -46,6 +46,11 @@ jobs:
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "GIT_AUTHOR_NAME=$GITHUB_ACTOR" >> $GITHUB_ENV
           echo "GITHUB_USER=$GITHUB_ACTOR" >> $GITHUB_ENV
+      - name: Build docker image locally
+        run: |
+          docker build . \
+            --file cmd/zigbee2mqtt-mongodb-broker/Dockerfile \
+            --tag shauncampbell/zigbee2mqtt-mongodb-broker
       - name: Release to Github
         id: semantic
         working-directory: ./.github/workflows
