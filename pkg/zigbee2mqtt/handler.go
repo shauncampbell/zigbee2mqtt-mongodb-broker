@@ -74,13 +74,17 @@ func (h *Handler) deviceEventHandler(device *Device, logger *zerolog.Logger) mqt
 func (h *Handler) persistDeviceToMongodb(device *Device) {
 	// Set up mongodb variables
 	collection := h.database.Collection("current_state")
-
+	attributes := make([]string, 0)
+	for _, attr := range device.Definition.Exposes {
+		attributes = append(attributes, attr.Property)
+	}
 	set := bson.D{
 		{Key: "friendly_name", Value: device.FriendlyName},
 		{Key: "type", Value: device.Type},
 		{Key: "network_address", Value: device.NetworkAddress},
 		{Key: "model", Value: device.Definition.Model},
 		{Key: "vendor", Value: device.Definition.Vendor},
+		{Key: "attributes", Value: attributes},
 	}
 
 	filter := bson.D{{Key: "_id", Value: "mqtt_" + device.IEEEAddress}}
