@@ -104,8 +104,10 @@ func (h *Handler) persistStateToMongoDB(device *Device, state map[string]interfa
 	// Iterate through the changes.
 	for _, attr := range device.Definition.Exposes {
 		if state[attr.Property] != nil {
-			set = append(set, bson.E{Key: "status."+attr.Property, Value: state[attr.Property]})
-			push = append(push, bson.E{Key: attr.Property, Value: bson.D{{Key: "ts", Value: ts}, {Key: "v", Value: state[attr.Property]}}})
+			set = append(set, bson.E{Key: "status." + attr.Property, Value: state[attr.Property]})
+			push = append(push,
+				bson.E{Key: "status." + attr.Property, Value: bson.D{
+					{Key: "ts", Value: ts}, {Key: "v", Value: state[attr.Property]}}})
 		}
 	}
 
